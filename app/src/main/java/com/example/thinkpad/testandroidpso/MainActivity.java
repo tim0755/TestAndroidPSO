@@ -3,6 +3,7 @@ package com.example.thinkpad.testandroidpso;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.org.gandhim.pso.PSOConstants;
 import com.org.gandhim.pso.PSOProcess;
 import com.org.gandhim.pso.Point;
 
@@ -37,14 +38,18 @@ public class MainActivity extends AppCompatActivity {
                     if (!mRunning) {
                         //System.currentTimeMillis();
                         try {
-                            Thread.sleep(1000);
+                            Thread.sleep(5000);
                         } catch (InterruptedException e) {
                         }
                         continue;
                     }
                     mRunning = false;
                     result = mPSOProcess.execute();
-                    System.out.println("result: (" + result[0] + "," + result[3] + "), (" + result[1] + "," + result[4] + "), (" + result[2] + "," + result[5] + ")");
+                    System.out.print("result:(");
+                    for (int i = 0; i < PSOConstants.PROBLEM_DIMENSION; i++) {
+                        System.out.print("" + result[i] + " , ");
+                    }
+                    System.out.println(")");
                 }
             }
         });

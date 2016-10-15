@@ -12,18 +12,18 @@ package com.org.gandhim.pso;
 // you need to introduce a new variable (other than x and y)
 
 public class ProblemSet {
-    public static final double LOC_X_LOW = -10;//azimuth 方位角
-    public static final double LOC_X_HIGH = 10;
+    public static final double LOC_X_LOW = -3;//azimuth 方位角
+    public static final double LOC_X_HIGH = 3;
     public static final double LOC_Y_LOW = -10;//elevation 仰角
     public static final double LOC_Y_HIGH = 10;
-    public static final double LOC_Z_LOW = -10;//rotate 旋转角
-    public static final double LOC_Z_HIGH = 10;
+    public static final double LOC_Z_LOW = -3;//rotate 旋转角
+    public static final double LOC_Z_HIGH = 3;
     public static final double LOC_X_LOW2 = -10;//azimuth 方位角
     public static final double LOC_X_HIGH2 = 10;
     public static final double LOC_Y_LOW2 = -10;//elevation 仰角
     public static final double LOC_Y_HIGH2 = 10;
-    public static final double LOC_Z_LOW2 = -10;//rotate 旋转角
-    public static final double LOC_Z_HIGH2 = 10;
+    public static final double LOC_Z_LOW2 = -3;//rotate 旋转角
+    public static final double LOC_Z_HIGH2 = 3;
     public static final double VEL_LOW = -1;
     public static final double VEL_HIGH = 1;
 
@@ -148,7 +148,7 @@ public class ProblemSet {
             xTarget2 = (pLongitude + M_PI) / (2.0 * M_PI) * TARGET_WIDTH;
             yTarget2 = (-pLatitude + M_PI / 2.0) / M_PI * TARGET_HEIGHT;
 
-            distance = Math.pow(xTarget1 - xTarget2, 2.0) + Math.pow(yTarget1 - yTarget2, 2.0);
+            distance = Math.pow(Math.pow(xTarget1 - xTarget2, 2.0) + Math.pow(yTarget1 - yTarget2, 2.0), 1.0/2);
             total += distance;
 
             mTargetPoint[i][0].x = xTarget1;
@@ -167,19 +167,19 @@ public class ProblemSet {
         double x1 = location.getLoc()[0] * Math.PI / 180; // the "x" part of the location
         double y1 = location.getLoc()[1] * Math.PI / 180; // the "y" part of the location
         double z1 = location.getLoc()[2] * Math.PI / 180; // the "z" part of the location
-        double x2 = location.getLoc()[3] * Math.PI / 180; // the "x" part of the location
-        double y2 = location.getLoc()[4] * Math.PI / 180; // the "y" part of the location
-        double z2 = location.getLoc()[5] * Math.PI / 180; // the "z" part of the location
-        double[] azimuth = {x1, -Math.PI - x2};
-        double[] elevation = {y1, -y2};
-        double[] rotate = {z1, -z2};
+        double z0 = location.getLoc()[3] * Math.PI / 180; // the "x" part of the location
+        //double y2 = location.getLoc()[4] * Math.PI / 180; // the "y" part of the location
+        //double z2 = location.getLoc()[5] * Math.PI / 180; // the "z" part of the location
+        double[] azimuth = {0, -Math.PI - x1};
+        double[] elevation = {0, -y1};
+        double[] rotate = {z0, -z1};
 
         return fishEye2EquirecProjectionForward(azimuth, elevation, rotate, optimalPixelSize);
     }
 
     public void show() {
         for (int i = 0; i < mMatchPointFishEye1.length; i++) {
-            System.out.println("(x1,x2):(y1,y2):(dx,dy)  (" + mTargetPoint[i][0].x + "," + mTargetPoint[i][1].x + "):(" + mTargetPoint[i][0].y + "," + mTargetPoint[i][1].y + ") (" + (mTargetPoint[i][0].x-mTargetPoint[i][1].x) + "," + (mTargetPoint[i][0].y-mTargetPoint[i][1].y) + ")");
+            System.out.println("(x1,x2):(y1,y2):(dx,dy)  (" + mTargetPoint[i][0].x + " , " + mTargetPoint[i][1].x + ") : (" + mTargetPoint[i][0].y + " , " + mTargetPoint[i][1].y + ") (" + (mTargetPoint[i][0].x-mTargetPoint[i][1].x) + " , " + (mTargetPoint[i][0].y-mTargetPoint[i][1].y) + ")");
         }
     }
 }
