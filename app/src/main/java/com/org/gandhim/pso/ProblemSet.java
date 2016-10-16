@@ -12,20 +12,20 @@ package com.org.gandhim.pso;
 // you need to introduce a new variable (other than x and y)
 
 public class ProblemSet {
-    public static final double LOC_X_LOW = -3;//azimuth 方位角
-    public static final double LOC_X_HIGH = 3;
+    public static final double LOC_X_LOW = -2;//azimuth 方位角
+    public static final double LOC_X_HIGH = 2;
     public static final double LOC_Y_LOW = -10;//elevation 仰角
     public static final double LOC_Y_HIGH = 10;
-    public static final double LOC_Z_LOW = -3;//rotate 旋转角
-    public static final double LOC_Z_HIGH = 3;
+    public static final double LOC_Z_LOW = -2;//rotate 旋转角
+    public static final double LOC_Z_HIGH = 2;
     public static final double LOC_X_LOW2 = -10;//azimuth 方位角
     public static final double LOC_X_HIGH2 = 10;
     public static final double LOC_Y_LOW2 = -10;//elevation 仰角
     public static final double LOC_Y_HIGH2 = 10;
-    public static final double LOC_Z_LOW2 = -3;//rotate 旋转角
-    public static final double LOC_Z_HIGH2 = 3;
-    public static final double VEL_LOW = -1;
-    public static final double VEL_HIGH = 1;
+    public static final double LOC_Z_LOW2 = -2;//rotate 旋转角
+    public static final double LOC_Z_HIGH2 = 2;
+    public static final double VEL_LOW = -0.5;
+    public static final double VEL_HIGH = 0.5;
 
     public static final double ERR_TOLERANCE = 10;//1E-20; // the smaller the tolerance, the more accurate the result,
     // but the number of iteration is increased
@@ -33,7 +33,7 @@ public class ProblemSet {
     private static final double M_PI = Math.PI;
     private static final int TARGET_WIDTH = 1920;
     private static final int TARGET_HEIGHT = 960;
-    public static final double optimalPixelSize = 0.003691;//0.00375
+    private static final double optimalPixelSize = 0.003691;//0.00375
     private static final int POLYNOME_FITTING_LEVEL_F = 9;//(8+1)
     private static final double coeff_f[/*POLYNOME_FITTING_LEVEL_F*/] = {
             0.0,
@@ -148,7 +148,7 @@ public class ProblemSet {
             xTarget2 = (pLongitude + M_PI) / (2.0 * M_PI) * TARGET_WIDTH;
             yTarget2 = (-pLatitude + M_PI / 2.0) / M_PI * TARGET_HEIGHT;
 
-            distance = Math.pow(Math.pow(xTarget1 - xTarget2, 2.0) + Math.pow(yTarget1 - yTarget2, 2.0), 1.0/2);
+            distance = Math.pow(xTarget1 - xTarget2, 2.0) + Math.pow(yTarget1 - yTarget2, 2.0);
             total += distance;
 
             mTargetPoint[i][0].x = xTarget1;
@@ -174,12 +174,14 @@ public class ProblemSet {
         double[] elevation = {0, -y1};
         double[] rotate = {z0, -z1};
 
+        minTotal = 10000000.0;
+
         return fishEye2EquirecProjectionForward(azimuth, elevation, rotate, optimalPixelSize);
     }
 
     public void show() {
         for (int i = 0; i < mMatchPointFishEye1.length; i++) {
-            System.out.println("(x1,x2):(y1,y2):(dx,dy)  (" + mTargetPoint[i][0].x + " , " + mTargetPoint[i][1].x + ") : (" + mTargetPoint[i][0].y + " , " + mTargetPoint[i][1].y + ") (" + (mTargetPoint[i][0].x-mTargetPoint[i][1].x) + " , " + (mTargetPoint[i][0].y-mTargetPoint[i][1].y) + ")");
+            System.out.println("(x1,x2):(y1,y2):(dx,dy)  (" + mTargetPoint[i][0].x + " , " + mTargetPoint[i][1].x + ") : (" + mTargetPoint[i][0].y + " , " + mTargetPoint[i][1].y + ") (" + (mTargetPoint[i][0].x - mTargetPoint[i][1].x) + " , " + (mTargetPoint[i][0].y - mTargetPoint[i][1].y) + ")");
         }
     }
 }

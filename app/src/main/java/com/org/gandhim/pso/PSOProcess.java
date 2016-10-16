@@ -162,28 +162,28 @@ public class PSOProcess implements PSOConstants {
 //            loc[4] = ProblemSet.LOC_Y_LOW2 + generator.nextDouble() * (ProblemSet.LOC_Y_HIGH2 - ProblemSet.LOC_Y_LOW2);
 //            loc[5] = ProblemSet.LOC_Z_LOW2 + generator.nextDouble() * (ProblemSet.LOC_Z_HIGH2 - ProblemSet.LOC_Z_LOW2);
 
-            System.out.print("initializeSwarm loc:(");
+            /*System.out.print("initializeSwarm loc:(");
             for (int k = 0; k < PSOConstants.PROBLEM_DIMENSION; k++) {
                 System.out.print("" + loc[k] + " , ");
             }
-            System.out.println(")");
+            System.out.println(")");*/
 
             Location location = new Location(loc);
 
             // randomize velocity in the range defined in Problem Set
             double[] vel = new double[PROBLEM_DIMENSION];
-            vel[0] = /*ProblemSet.VEL_LOW + generator.nextDouble() * */(ProblemSet.LOC_X_HIGH - ProblemSet.LOC_X_LOW) / 8.0;
-            vel[1] = /*ProblemSet.VEL_LOW + generator.nextDouble() * */(ProblemSet.LOC_Y_HIGH - ProblemSet.LOC_Y_LOW) / 8.0;
-            vel[2] = /*ProblemSet.VEL_LOW + generator.nextDouble() * */(ProblemSet.LOC_Z_HIGH - ProblemSet.LOC_Z_LOW) / 8.0;
-            vel[3] = /*ProblemSet.VEL_LOW + generator.nextDouble() * */(ProblemSet.LOC_Z_HIGH2 - ProblemSet.LOC_Z_LOW2) / 8.0;
+            vel[0] = 0.5;//ProblemSet.VEL_LOW + generator.nextDouble() * (ProblemSet.LOC_X_HIGH - ProblemSet.LOC_X_LOW) / 8.0;
+            vel[1] = 0.5;//ProblemSet.VEL_LOW + generator.nextDouble() * (ProblemSet.LOC_Y_HIGH - ProblemSet.LOC_Y_LOW) / 8.0;
+            vel[2] = 0.5;//ProblemSet.VEL_LOW + generator.nextDouble() * (ProblemSet.LOC_Z_HIGH - ProblemSet.LOC_Z_LOW) / 8.0;
+            vel[3] = 0.5;//ProblemSet.VEL_LOW + generator.nextDouble() * (ProblemSet.LOC_Z_HIGH2 - ProblemSet.LOC_Z_LOW2) / 8.0;
 //            vel[4] = /*ProblemSet.VEL_LOW + generator.nextDouble() * */(ProblemSet.LOC_Y_HIGH2 - ProblemSet.LOC_Y_LOW2) / 8.0;
 //            vel[5] = /*ProblemSet.VEL_LOW + generator.nextDouble() * */(ProblemSet.LOC_Z_HIGH2 - ProblemSet.LOC_Z_LOW2) / 8.0;
 
-            System.out.print("initializeSwarm vel:(");
+            /*System.out.print("initializeSwarm vel:(");
             for (int k = 0; k < PSOConstants.PROBLEM_DIMENSION; k++) {
                 System.out.print("" + vel[k] + " , ");
             }
-            System.out.println(")");
+            System.out.println(")");*/
 
             Velocity velocity = new Velocity(vel);
 

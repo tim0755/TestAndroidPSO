@@ -38,17 +38,19 @@ public class MainActivity extends AppCompatActivity {
                     if (!mRunning) {
                         //System.currentTimeMillis();
                         try {
-                            Thread.sleep(5000);
+                            Thread.sleep(1000);
                         } catch (InterruptedException e) {
                         }
                         continue;
                     }
                     mRunning = false;
                     result = mPSOProcess.execute();
+                    int i = 0;
                     System.out.print("result:(");
-                    for (int i = 0; i < PSOConstants.PROBLEM_DIMENSION; i++) {
+                    for (i = 0; i < PSOConstants.PROBLEM_DIMENSION; i++) {
                         System.out.print("" + result[i] + " , ");
                     }
+                    System.out.print(" " + (result[i - 1] - result[i - 2]));
                     System.out.println(")");
                 }
             }
