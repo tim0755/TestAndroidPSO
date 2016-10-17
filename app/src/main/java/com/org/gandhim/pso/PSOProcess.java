@@ -21,12 +21,12 @@ public class PSOProcess implements PSOConstants {
     private ProblemSet mProblemSet;
 
     public PSOProcess(Point[] points1, Point[] points2) {
-        System.out.println("ProblemSet points1:" + points1.length + "   points2:" + points2.length);
+        //System.out.println("ProblemSet points1:" + points1.length + "   points2:" + points2.length);
         mProblemSet = new ProblemSet(points1, points2);
     }
 
     public double[] execute() {
-        System.out.println("ProblemSet execute!");
+        //System.out.println("ProblemSet execute!");
         initializeSwarm();
         updateFitnessList();
 
@@ -56,11 +56,11 @@ public class PSOProcess implements PSOConstants {
                 gBest = fitnessValueList[bestParticleIndex];
                 gBestLocation = swarm.get(bestParticleIndex).getLocation();
 
-                System.out.print("hit:(");
+                /*System.out.print("hit:(");
                 for (int i = 0; i < PSOConstants.PROBLEM_DIMENSION; i++) {
                     System.out.print("" + gBestLocation.getLoc()[i] + " , ");
                 }
-                System.out.println(") err:" + +mProblemSet.evaluate(gBestLocation));
+                System.out.println(") err:" + +mProblemSet.evaluate(gBestLocation));*/
             }
 
             w = W_UPPERBOUND - (((double) t) / MAX_ITERATION) * (W_UPPERBOUND - W_LOWERBOUND);
@@ -77,14 +77,14 @@ public class PSOProcess implements PSOConstants {
                     newVel[j] = (w * p.getVelocity().getPos()[j]) +
                             (r1 * C1) * (pBestLocation.get(i).getLoc()[j] - p.getLocation().getLoc()[j]) +
                             (r2 * C2) * (gBestLocation.getLoc()[j] - p.getLocation().getLoc()[j]);
-                    if (newVel[j] > ProblemSet.VEL_HIGH) {
-                        newVel[j] = ProblemSet.VEL_HIGH;
-                    } else if (newVel[j] < ProblemSet.VEL_LOW) {
-                        newVel[j] = ProblemSet.VEL_LOW;
+                    if (newVel[j] < mProblemSet.mDimensionVelocity[j][0]) {
+                        newVel[j] = mProblemSet.mDimensionVelocity[j][0];
+                    } else if (newVel[j] > mProblemSet.mDimensionVelocity[j][1]) {
+                        newVel[j] = mProblemSet.mDimensionVelocity[j][1];
                     }
                 }
 
-                if (prnitFlag && t % 1000 == 0) {
+                /*if (prnitFlag && t % 100 == 0) {
                     prnitFlag = false;
 
                     System.out.print("newVel:(");
@@ -92,7 +92,8 @@ public class PSOProcess implements PSOConstants {
                         System.out.print("" + newVel[k] + " , ");
                     }
                     System.out.println(") times:" + t);
-                }
+                }*/
+
                 Velocity vel = new Velocity(newVel);
                 p.setVelocity(vel);
 
@@ -100,33 +101,11 @@ public class PSOProcess implements PSOConstants {
                 double[] newLoc = new double[PROBLEM_DIMENSION];
                 for (int j = 0; j < PROBLEM_DIMENSION; j++) {
                     newLoc[j] = p.getLocation().getLoc()[j] + newVel[j];
-                }
-
-                if (newLoc[0] > ProblemSet.LOC_X_HIGH) {
-                    newLoc[0] = ProblemSet.LOC_X_HIGH;
-                } else if (newLoc[0] < ProblemSet.LOC_X_LOW) {
-                    newLoc[0] = ProblemSet.LOC_X_LOW;
-                }
-
-
-                if (newLoc[1] > ProblemSet.LOC_Y_HIGH) {
-                    newLoc[1] = ProblemSet.LOC_Y_HIGH;
-                } else if (newLoc[1] < ProblemSet.LOC_Y_LOW) {
-                    newLoc[1] = ProblemSet.LOC_Y_LOW;
-                }
-
-
-                if (newLoc[2] > ProblemSet.LOC_Z_HIGH) {
-                    newLoc[2] = ProblemSet.LOC_Z_HIGH;
-                } else if (newLoc[2] < ProblemSet.LOC_Z_LOW) {
-                    newLoc[2] = ProblemSet.LOC_Z_LOW;
-                }
-
-
-                if (newLoc[3] > ProblemSet.LOC_Z_HIGH2) {
-                    newLoc[3] = ProblemSet.LOC_Z_HIGH2;
-                } else if (newLoc[3] < ProblemSet.LOC_Z_LOW2) {
-                    newLoc[3] = ProblemSet.LOC_Z_LOW2;
+                    if (newLoc[j] < mProblemSet.mDimensionRange[j][0])
+                        newLoc[j] = mProblemSet.mDimensionRange[j][0];
+                    else if (newLoc[j] > mProblemSet.mDimensionRange[j][1]) {
+                        newLoc[j] = mProblemSet.mDimensionRange[j][1];
+                    }
                 }
 
                 Location loc = new Location(newLoc);
@@ -138,13 +117,13 @@ public class PSOProcess implements PSOConstants {
         }
         //System.out.println("(azimuth,elevation,rotate)=(" + gBestLocation.getLoc()[0] + "," + gBestLocation.getLoc()[1] + "," + gBestLocation.getLoc()[2] + "), (" + gBestLocation.getLoc()[3] + "," + gBestLocation.getLoc()[4] + "," + gBestLocation.getLoc()[5] + ") err:" + err + " time:" + t);
 
-        System.out.print("gBestLocation:(");
+        System.out.print("gBest err:" + mProblemSet.evaluate(gBestLocation) + " (");
         for (int k = 0; k < PSOConstants.PROBLEM_DIMENSION; k++) {
             System.out.print("" + gBestLocation.getLoc()[k] + " , ");
         }
-        System.out.println(") err:" + mProblemSet.evaluate(gBestLocation));
+        System.out.println(")");
 
-        mProblemSet.show();
+        //mProblemSet.show();
         return gBestLocation.getLoc();
     }
 
@@ -155,12 +134,9 @@ public class PSOProcess implements PSOConstants {
 
             // randomize location inside a space defined in Problem Set
             double[] loc = new double[PROBLEM_DIMENSION];
-            loc[0] = ProblemSet.LOC_X_LOW + generator.nextDouble() * (ProblemSet.LOC_X_HIGH - ProblemSet.LOC_X_LOW);
-            loc[1] = ProblemSet.LOC_Y_LOW + generator.nextDouble() * (ProblemSet.LOC_Y_HIGH - ProblemSet.LOC_Y_LOW);
-            loc[2] = ProblemSet.LOC_Z_LOW + generator.nextDouble() * (ProblemSet.LOC_Z_HIGH - ProblemSet.LOC_Z_LOW);
-            loc[3] = ProblemSet.LOC_Z_LOW2 + generator.nextDouble() * (ProblemSet.LOC_Z_HIGH2 - ProblemSet.LOC_Z_LOW2);
-//            loc[4] = ProblemSet.LOC_Y_LOW2 + generator.nextDouble() * (ProblemSet.LOC_Y_HIGH2 - ProblemSet.LOC_Y_LOW2);
-//            loc[5] = ProblemSet.LOC_Z_LOW2 + generator.nextDouble() * (ProblemSet.LOC_Z_HIGH2 - ProblemSet.LOC_Z_LOW2);
+            for (int d = 0; d < PROBLEM_DIMENSION; d++) {
+                loc[d] = mProblemSet.mDimensionRange[d][0] + generator.nextDouble() * (mProblemSet.mDimensionRange[d][1] - mProblemSet.mDimensionRange[d][0]);
+            }
 
             /*System.out.print("initializeSwarm loc:(");
             for (int k = 0; k < PSOConstants.PROBLEM_DIMENSION; k++) {
@@ -172,12 +148,9 @@ public class PSOProcess implements PSOConstants {
 
             // randomize velocity in the range defined in Problem Set
             double[] vel = new double[PROBLEM_DIMENSION];
-            vel[0] = 0.5;//ProblemSet.VEL_LOW + generator.nextDouble() * (ProblemSet.LOC_X_HIGH - ProblemSet.LOC_X_LOW) / 8.0;
-            vel[1] = 0.5;//ProblemSet.VEL_LOW + generator.nextDouble() * (ProblemSet.LOC_Y_HIGH - ProblemSet.LOC_Y_LOW) / 8.0;
-            vel[2] = 0.5;//ProblemSet.VEL_LOW + generator.nextDouble() * (ProblemSet.LOC_Z_HIGH - ProblemSet.LOC_Z_LOW) / 8.0;
-            vel[3] = 0.5;//ProblemSet.VEL_LOW + generator.nextDouble() * (ProblemSet.LOC_Z_HIGH2 - ProblemSet.LOC_Z_LOW2) / 8.0;
-//            vel[4] = /*ProblemSet.VEL_LOW + generator.nextDouble() * */(ProblemSet.LOC_Y_HIGH2 - ProblemSet.LOC_Y_LOW2) / 8.0;
-//            vel[5] = /*ProblemSet.VEL_LOW + generator.nextDouble() * */(ProblemSet.LOC_Z_HIGH2 - ProblemSet.LOC_Z_LOW2) / 8.0;
+            for (int d = 0; d < PROBLEM_DIMENSION; d++) {
+                vel[d] = /*mProblemSet.mDimensionVelocity[d][0] + generator.nextDouble() * */(mProblemSet.mDimensionRange[d][1] - mProblemSet.mDimensionRange[d][0]) / initDivide;
+            }
 
             /*System.out.print("initializeSwarm vel:(");
             for (int k = 0; k < PSOConstants.PROBLEM_DIMENSION; k++) {
