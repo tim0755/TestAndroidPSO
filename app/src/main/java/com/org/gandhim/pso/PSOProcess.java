@@ -84,15 +84,19 @@ public class PSOProcess implements PSOConstants {
                     }
                 }
 
-                /*if (prnitFlag && t % 100 == 0) {
+                if (prnitFlag && t % 20 == 0) {
                     prnitFlag = false;
 
-                    System.out.print("newVel:(");
+                    System.out.print("times:" + t + " err:" + mProblemSet.evaluate(gBestLocation) + " loc:(");
+                    for (int k = 0; k < PSOConstants.PROBLEM_DIMENSION; k++) {
+                        System.out.print("" + gBestLocation.getLoc()[k] + " , ");
+                    }
+                    System.out.print(" newVel:(");
                     for (int k = 0; k < PSOConstants.PROBLEM_DIMENSION; k++) {
                         System.out.print("" + newVel[k] + " , ");
                     }
-                    System.out.println(") times:" + t);
-                }*/
+                    System.out.println(")");
+                }
 
                 Velocity vel = new Velocity(newVel);
                 p.setVelocity(vel);
@@ -102,9 +106,9 @@ public class PSOProcess implements PSOConstants {
                 for (int j = 0; j < PROBLEM_DIMENSION; j++) {
                     newLoc[j] = p.getLocation().getLoc()[j] + newVel[j];
                     if (newLoc[j] < mProblemSet.mDimensionRange[j][0])
-                        newLoc[j] = mProblemSet.mDimensionRange[j][0];
-                    else if (newLoc[j] > mProblemSet.mDimensionRange[j][1]) {
                         newLoc[j] = mProblemSet.mDimensionRange[j][1];
+                    else if (newLoc[j] > mProblemSet.mDimensionRange[j][1]) {
+                        newLoc[j] = mProblemSet.mDimensionRange[j][0];
                     }
                 }
 
