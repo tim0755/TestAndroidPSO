@@ -33,32 +33,34 @@ public class ProblemSet {
             0.255559958265590
     };
 
+    public static final double[][] mDimensionRange = {
+            //{min, max}
+
+            //camera 0:
+            {0.0035, 0.0038},   //pixelSize
+
+            //camera 1:
+            {-5, 5},            //azimuth
+            {-10, 10},          //elevation
+            {-5, 5},            //rotate
+            {0.0035, 0.0038},   //pixelSize
+    };
+
+    public static final double[][] mDimensionVelocity = {
+            //min , max
+
+            //camera 0:
+            {-0.00005, 0.00005},//pixelSize
+
+            //camera 1:
+            {-0.5, 0.5},        //azimuth
+            {-0.5, 0.5},        //elevation
+            {-0.5, 0.5},        //rotate
+            {-0.00005, 0.00005},//pixelSize
+    };
+
     private Point[] mMatchPointFishEye1;
     private Point[] mMatchPointFishEye2;
-
-    private static final double MIN_DIMENSION_RANGE0 = -5;
-    private static final double MAX_DIMENSION_RANGE0 = 5;
-    private static final double MIN_DIMENSION_RANGE1 = -5;
-    private static final double MAX_DIMENSION_RANGE1 = 5;
-    private static final double MIN_DIMENSION_RANGE2 = -5;
-    private static final double MAX_DIMENSION_RANGE2 = 5;
-    private static final double MIN_DIMENSION_RANGE3 = 0.0035;
-    private static final double MAX_DIMENSION_RANGE3 = 0.0038;
-    private static final double MIN_DIMENSION_RANGE4 = -5;
-    private static final double MAX_DIMENSION_RANGE4 = 5;
-    private static final double MIN_DIMENSION_RANGE5 = -5;
-    private static final double MAX_DIMENSION_RANGE5 = 5;
-    private static final double MIN_DIMENSION_RANGE6 = -5;
-    private static final double MAX_DIMENSION_RANGE6 = 5;
-    private static final double MIN_DIMENSION_RANGE7 = 0.0035;
-    private static final double MAX_DIMENSION_RANGE7 = 0.0038;
-    public double[][] mDimensionRange;
-
-    public static final double VEL_LOW = -0.5;
-    public static final double VEL_HIGH = 0.5;
-    public static final double VEL_LOW2 = -0.00005;
-    public static final double VEL_HIGH2 = 0.00005;
-    public double[][] mDimensionVelocity;
 
     private double minTotal = 10000000.0;
 
@@ -78,44 +80,6 @@ public class ProblemSet {
             mTargetPoint[i][0] = new Point(0, 0);
             mTargetPoint[i][1] = new Point(0, 0);
         }
-
-        mDimensionRange = new double[PSOConstants.PROBLEM_DIMENSION][2];
-        mDimensionRange[0][0] = MIN_DIMENSION_RANGE0;
-        mDimensionRange[0][1] = MAX_DIMENSION_RANGE0;
-        mDimensionRange[1][0] = MIN_DIMENSION_RANGE1;
-        mDimensionRange[1][1] = MAX_DIMENSION_RANGE1;
-        mDimensionRange[2][0] = MIN_DIMENSION_RANGE2;
-        mDimensionRange[2][1] = MAX_DIMENSION_RANGE2;
-        mDimensionRange[3][0] = MIN_DIMENSION_RANGE3;
-        mDimensionRange[3][1] = MAX_DIMENSION_RANGE3;
-
-        mDimensionRange[4][0] = MIN_DIMENSION_RANGE4;
-        mDimensionRange[4][1] = MAX_DIMENSION_RANGE4;
-        mDimensionRange[5][0] = MIN_DIMENSION_RANGE5;
-        mDimensionRange[5][1] = MAX_DIMENSION_RANGE5;
-        mDimensionRange[6][0] = MIN_DIMENSION_RANGE6;
-        mDimensionRange[6][1] = MAX_DIMENSION_RANGE6;
-        mDimensionRange[7][0] = MIN_DIMENSION_RANGE7;
-        mDimensionRange[7][1] = MAX_DIMENSION_RANGE7;
-
-        mDimensionVelocity = new double[PSOConstants.PROBLEM_DIMENSION][2];
-        mDimensionVelocity[0][0] = VEL_LOW;
-        mDimensionVelocity[0][1] = VEL_HIGH;
-        mDimensionVelocity[1][0] = VEL_LOW;
-        mDimensionVelocity[1][1] = VEL_HIGH;
-        mDimensionVelocity[2][0] = VEL_LOW;
-        mDimensionVelocity[2][1] = VEL_HIGH;
-        mDimensionVelocity[3][0] = VEL_LOW2;
-        mDimensionVelocity[3][1] = VEL_HIGH2;
-
-        mDimensionVelocity[4][0] = VEL_LOW;
-        mDimensionVelocity[4][1] = VEL_HIGH;
-        mDimensionVelocity[5][0] = VEL_LOW;
-        mDimensionVelocity[5][1] = VEL_HIGH;
-        mDimensionVelocity[6][0] = VEL_LOW;
-        mDimensionVelocity[6][1] = VEL_HIGH;
-        mDimensionVelocity[7][0] = VEL_LOW2;
-        mDimensionVelocity[7][1] = VEL_HIGH2;
     }
 
     private void sphereRotation_f(double longitude, double latitude, double camAzimuth, double camElevation/*, double *pNewLongitude, double *pNewLatitude */) {
@@ -211,20 +175,15 @@ public class ProblemSet {
     }
 
     public double evaluate(Location location) {
-        double x0 = location.getLoc()[0] * Math.PI / 180;
+        /*double x0 = location.getLoc()[0] * Math.PI / 180;
         double y0 = location.getLoc()[1] * Math.PI / 180;
         double z0 = location.getLoc()[2] * Math.PI / 180;
-        double p0 = location.getLoc()[3];
+        double p0 = location.getLoc()[0];*/
 
-        double x1 = location.getLoc()[4] * Math.PI / 180;
-        double y1 = location.getLoc()[5] * Math.PI / 180;
-        double z1 = location.getLoc()[6] * Math.PI / 180;
-        double p1 = location.getLoc()[7];
-
-        double[] azimuth = {x0, -Math.PI - x1};
-        double[] elevation = {y0, -y1};
-        double[] rotate = {z0, -z1};
-        double[] pixelSize = {p0, p1};
+        double[] azimuth = {0, -Math.PI - location.getLoc()[1] * Math.PI / 180};
+        double[] elevation = {0, -location.getLoc()[2] * Math.PI / 180};
+        double[] rotate = {0, -location.getLoc()[3] * Math.PI / 180};
+        double[] pixelSize = {location.getLoc()[0], location.getLoc()[4]};
 
         minTotal = 10000000.0;
 
