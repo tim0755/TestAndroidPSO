@@ -44,6 +44,7 @@ public class ProblemSet {
             {-10, 10},          //elevation
             {-5, 5},            //rotate
             {0.0035, 0.0038},   //pixelSize
+            {-10, 10},            //yShift
     };
 
     public static final double[][] mDimensionVelocity = {
@@ -57,6 +58,7 @@ public class ProblemSet {
             {-0.5, 0.5},        //elevation
             {-0.5, 0.5},        //rotate
             {-0.00005, 0.00005},//pixelSize
+            {-1, 1},        //yShift
     };
 
     private Point[] mMatchPointFishEye1;
@@ -126,7 +128,7 @@ public class ProblemSet {
         return true;
     }
 
-    private double fishEye2EquirecProjectionForward(double[] azimuthDelta, double[] elevationDelta, double[] rotateDelta, double[] pixelSize) {
+    private double fishEye2EquirecProjectionForward(double[] azimuthDelta, double[] elevationDelta, double[] rotateDelta, double[] yShift, double[] pixelSize) {
         double x1, y1, x2, y2;
         double xDelta1, yDelta1, xDelta2, yDelta2;
         double xTarget1, yTarget1, xTarget2, yTarget2;
@@ -148,7 +150,7 @@ public class ProblemSet {
             if (!fishEye2Sphere(xDelta1, yDelta1, azimuthDelta[0], elevationDelta[0], pixelSize[0]))
                 continue;
             xTarget1 = (pLongitude + M_PI) / (2.0 * M_PI) * TARGET_WIDTH;
-            yTarget1 = (-pLatitude + M_PI / 2.0) / M_PI * TARGET_HEIGHT;
+            yTarget1 = (-pLatitude + M_PI / 2.0) / M_PI * TARGET_HEIGHT + yShift[0];
 
             x2 = mMatchPointFishEye2[i].x;
             y2 = mMatchPointFishEye2[i].y;
@@ -157,7 +159,7 @@ public class ProblemSet {
             if (!fishEye2Sphere(xDelta2, yDelta2, azimuthDelta[1], elevationDelta[1], pixelSize[1]))
                 continue;
             xTarget2 = (pLongitude + M_PI) / (2.0 * M_PI) * TARGET_WIDTH;
-            yTarget2 = (-pLatitude + M_PI / 2.0) / M_PI * TARGET_HEIGHT;
+            yTarget2 = (-pLatitude + M_PI / 2.0) / M_PI * TARGET_HEIGHT + yShift[1];
 
             distance = Math.pow(Math.pow(xTarget1 - xTarget2, 2.0) + Math.pow(yTarget1 - yTarget2, 2.0), 1.0 / 2);
             total += distance;
@@ -184,10 +186,11 @@ public class ProblemSet {
         double[] elevation = {0, -location.getLoc()[2] * Math.PI / 180};
         double[] rotate = {0, -location.getLoc()[3] * Math.PI / 180};
         double[] pixelSize = {location.getLoc()[0], location.getLoc()[4]};
+        double[] yShift = {0, location.getLoc()[5]};
 
         minTotal = 10000000.0;
 
-        return fishEye2EquirecProjectionForward(azimuth, elevation, rotate, pixelSize);
+        return fishEye2EquirecProjectionForward(azimuth, elevation, rotate, yShift, pixelSize);
     }
 
     public void show() {

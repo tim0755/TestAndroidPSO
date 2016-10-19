@@ -84,7 +84,7 @@ public class PSOProcess implements PSOConstants {
                     }
                 }
 
-                if (prnitFlag && t % 20 == 0) {
+                /*if (prnitFlag && t % 20 == 0) {
                     prnitFlag = false;
 
                     System.out.print("times:" + t + " err:" + mProblemSet.evaluate(gBestLocation) + " loc:(");
@@ -96,7 +96,7 @@ public class PSOProcess implements PSOConstants {
                         System.out.print("" + newVel[k] + " , ");
                     }
                     System.out.println(")");
-                }
+                }*/
 
                 Velocity vel = new Velocity(newVel);
                 p.setVelocity(vel);
@@ -127,7 +127,7 @@ public class PSOProcess implements PSOConstants {
         }
         System.out.println(")");
 
-        //mProblemSet.show();
+        mProblemSet.show();
         return gBestLocation.getLoc();
     }
 
